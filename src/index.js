@@ -27,6 +27,7 @@ function onSelectBreed(e) {
   e.preventDefault();
   const catId = refs.select.options[refs.select.selectedIndex].value;
 
+
   fetchCatByBreed(catId)
     .then(catId => {
       renderCat(catId)
@@ -35,20 +36,27 @@ function onSelectBreed(e) {
 };
 
 
-function breedDescriptionMarking(breeds) {
+function breedDescriptionMarking(breed) {
 
-  const { name, temperament, description, url, id } = breeds;
+
+  const name = breed[0].breeds[0].name;
+  
+  const url = breed[0].url;
+  const temperament = breed[0].breeds[0].temperament;
+  const description = breed[0].breeds[0].description;
+
 
   return `
   <div class="container_img">
     <img
       class="cat_img"
       src="${url}"
-      alt="cat photo"
+      alt="${name}"
       width="300"
       height="300">
   </div>
-  <div class="container_description"><h2 class="cat_breed">${name}</h2>
+  <div class="container_description">
+  <h2 class="cat_breed">${name}</h2>
     <p class="cat_description">
     ${description}
     </p>
@@ -59,8 +67,7 @@ function breedDescriptionMarking(breeds) {
   </div>`
 };
    
- function renderCat(catId) {0
+ function renderCat(catId) {
    const markup = breedDescriptionMarking(catId);
-   console.log(markup)
-refs.markupContainer.insertAdjacentHTML('beforeend', markup)
+   refs.markupContainer.innerHTML=markup;
 }
