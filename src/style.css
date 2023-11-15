@@ -1,0 +1,76 @@
+.breed-select {
+  height: 30px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+
+.loader {
+  display: flex;
+  font-size: 30px;
+  justify-content: center;
+}
+
+.is-hidden {
+  display: none;
+}
+
+
+.breed-select.hidden {
+  display: none;
+}
+
+.no-hidden {
+  display: block;
+}
+
+.error {
+  display: none;
+
+}
+
+.error-no-hidden {
+  display: flex;
+  justify-content: center;
+  color: rgb(180, 35, 10);
+  font-size: 30px;
+}
+
+.cat-card {
+  margin-top: 45px;
+  display: flex;
+  margin-left: 5px;
+  justify-content: center;
+}
+
+
+.cat-body {
+  max-width: 600px;
+}
+
+
+.cat-info.hidden {
+  display: none;
+}
+
+.cat-body {
+  margin-left: 40px;
+}
+
+
+.breed-name {
+  font-size: 30px;
+}
+
+
+.cat-descr {
+  font-size: 18px;
+}
+
+.cat-temperament {
+  font-size: 18px;
+}

@@ -1,73 +1,113 @@
+
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
-
-
-refs = {
+// import Notiflix from 'notiflix';
+const refs = {
   select: document.querySelector('.breed-select'),
-  textLoader: document.querySelector('.loader'),
-  textError: document.querySelector('.error'),
-  markupContainer: document.querySelector('.cat-info'),
-}
-
-function renderSelect(breeds) {
-  const markup = breeds.map(breed => `<option value =${breed.id}>${breed.name}</option>`)
-    .join('');
-  refs.select.insertAdjacentHTML('beforeend', markup);
-return markup
+ catInfo: document.querySelector('.cat-info'),
+ textLoader: document.querySelector('.loader'),
+ textError: document.querySelector('.error'),
 };
+
+
+refs.select.classList.add('is-hidden');
+refs.catInfo.classList.remove('cat-info');
+refs.catInfo.classList.add('is-hidden');
 
 fetchBreeds()
-  .then(breeds => {
+.then(breeds => {
+
     renderSelect(breeds)
-  })
-  .catch(error => console.log(error));
-
-refs.select.addEventListener('input', onSelectBreed);
-
-function onSelectBreed(e) {
-  e.preventDefault();
-  const catId = refs.select.options[refs.select.selectedIndex].value;
-
-
-  fetchCatByBreed(catId)
-    .then(catId => {
-      renderCat(catId)
-    })
-  .catch(error => console.log(error));
-};
-
-
-function breedDescriptionMarking(breed) {
-
-
-  const name = breed[0].breeds[0].name;
-  
-  const url = breed[0].url;
-  const temperament = breed[0].breeds[0].temperament;
-  const description = breed[0].breeds[0].description;
-
-
-  return `
-  <div class="container_img">
-    <img
-      class="cat_img"
-      src="${url}"
-      alt="${name}"
-      width="300"
-      height="300">
-  </div>
-  <div class="container_description">
-  <h2 class="cat_breed">${name}</h2>
-    <p class="cat_description">
-    ${description}
-    </p>
-    <p class="cat_temperament">
-    <b>Temperament:</b>
-     ${temperament}
-     </p>
-  </div>`
-};
-   
- function renderCat(catId) {
-   const markup = breedDescriptionMarking(catId);
-   refs.markupContainer.innerHTML=markup;
+    refs.select.classList.remove('is-hidden');
+    refs.select.classList.add('breed-select');
+    refs.textLoader.classList.remove('loader')
+    refs.textLoader.classList.add('is-hidden')
 }
+
+)
+.catch(error => {
+    refs.textLoader.classList.remove('loader')
+    refs.textLoader.classList.add('is-hidden')
+    refs.textError.classList.add('error-no-hidden');
+    refs.textError.classList.remove('error');
+    refs.select.classList.add('is-hidden');
+refs.catInfo.classList.remove('cat-info');
+ refs.catInfo.classList.add('is-hidden');
+ console.log(error);
+})
+    
+
+
+function renderSelect (breeds) {
+    const markup = breeds.map(breed => { 
+        return `<option value=${breed.id}>${breed.name}</option>`;
+    }).join('');
+    refs.select.insertAdjacentHTML('beforeend', markup);
+    
+}
+
+
+
+refs.select.addEventListener('input', onClick); 
+
+function onClick (e) {
+    e.preventDefault();
+    refs.textLoader.classList.add('loader');
+    refs.textLoader.classList.remove('is-hidden');
+    refs.catInfo.classList.remove('cat-info');
+     refs.catInfo.classList.add('is-hidden');
+    const cat = refs.select.options[refs.select.selectedIndex].value;
+    fetchCatByBreed(cat).then(cat => {
+
+
+        
+     renderCat(cat)
+     refs.catInfo.classList.add('cat-info');
+     refs.catInfo.classList.remove('is-hidden');
+     refs.textLoader.classList.remove('loader');
+     refs.textLoader.classList.add('is-hidden');
+        
+    }).catch(error => {
+      refs.textLoader.classList.remove('loader')
+      refs.textLoader.classList.add('is-hidden')
+        refs.textError.classList.add('error-no-hidden');
+        refs.textError.classList.remove('error');
+refs.catInfo.classList.remove('cat-info');
+     refs.catInfo.classList.add('is-hidden');
+        console.log(error)});
+
+}
+
+  
+  function heroTemplate(breeds) {
+    const temperament = breeds[0].breeds[0].temperament;
+    const description =  breeds[0].breeds[0].description;
+    const name = breeds[0].breeds[0].name;
+    const url = breeds[0].url;
+    return `
+    <div class="cat-card">
+        <div class="image-container">
+          <img
+            src="${url}"
+            alt="cat-image"
+            class="cat-image"
+            width="300px"
+            height="300px"
+          />
+        </div>
+        <div class="cat-body">
+          <h2 class="breed-name">${name}</h2>
+          <p class="cat-descr">
+            ${description} 
+          </p>
+          <p class="cat-temperament">
+            <b>Temperament</b>: ${temperament} 
+          </p>
+        </div>
+      </div>
+    `;
+  }
+  
+  function renderCat(cat) {
+    const markup = heroTemplate(cat);
+    refs.catInfo.innerHTML = markup;
+};
